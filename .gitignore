@@ -1,0 +1,4 @@
+*.kra
+*.kra~
+*.filtergraph
+*/Builds/*
