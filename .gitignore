@@ -1,4 +1,4 @@
 *.kra
 *.kra~
 *.filtergraph
-*/Builds/*
+Builds/*
