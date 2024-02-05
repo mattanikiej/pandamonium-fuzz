@@ -23,5 +23,5 @@ This plugin is built using the JUCE framework. See the [repository](https://gith
 Once the project is built, move the AU or VST3 file where those files are generally installed on your machine. Then you can use your DAW to use the plug in.
 
 <a href="https://www.coolxpanda.com/">
-    <img alt="Cool Panda Logo" src="/Assets/coolxpandapng.png" height="500">
+    <img alt="Cool Panda Logo" src="/Assets/coolxpandapng.png" height="200">
 </a>
