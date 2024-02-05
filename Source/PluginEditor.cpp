@@ -22,7 +22,11 @@ PandamoniumLookAndFeel::PandamoniumLookAndFeel()
     
     // default window settings
     setColour(juce::ResizableWindow::backgroundColourId, _grey);
+    
+    // labels
     setColour(juce::Label::textColourId, _whitePanda);
+    
+    setDefaultSansSerifTypeface(_komikax.getTypefacePtr());
     
 }
 
@@ -104,13 +108,13 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     setSize (700, 400);
     
     // set default look and feel
-    setLookAndFeel(&_lookAndFeel);
+    PandamoniumLookAndFeel::setDefaultLookAndFeel (&_lookAndFeel);
     
     // title
     _pandamoniumText.setEditable (false);
     _pandamoniumText.setText("PANDAMONIUM", juce::NotificationType::dontSendNotification);
-    _pandamoniumText.setFont(50.0f);
     _pandamoniumText.setJustificationType (juce::Justification::centred);
+    _pandamoniumText.setFont(50.0f);
     
     _fuzzText.setEditable (false);
     _fuzzText.setText("", juce::NotificationType::dontSendNotification);
@@ -183,6 +187,7 @@ void PandamoniumAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     float sliderWidth = 130.0f;
+    float fontSize = 50.0f;
     
     juce::Grid grid;
 
@@ -196,7 +201,7 @@ void PandamoniumAudioProcessorEditor::resized()
     grid.alignItems = juce::Grid::AlignItems::center;
 
     grid.items = {
-        juce::GridItem(_pandamoniumText),
+        juce::GridItem(_pandamoniumText).withHeight(fontSize),
         juce::GridItem(_fuzzText),
         juce::GridItem (_gainSlider).withWidth(sliderWidth).withHeight(sliderWidth),
         juce::GridItem (_fuzzSlider).withWidth(sliderWidth).withHeight(sliderWidth),

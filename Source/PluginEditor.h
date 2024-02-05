@@ -26,6 +26,9 @@ private:
     juce::Colour _blackPanda = juce::Colour(51, 51, 51);
     juce::Colour _whitePanda = juce::Colour(255, 254, 254);
     juce::Colour _grey = juce::Colour(59, 58, 59);
+    
+    // typefaces
+    juce::Font _komikax = juce::Font(juce::Typeface::createSystemTypefaceFor(BinaryData::KOMIKAX_woff2, BinaryData::KOMIKAX_woff2Size));
 };
 
 
