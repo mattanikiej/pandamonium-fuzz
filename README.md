@@ -1,5 +1,5 @@
 # Pandamonium Fuzz VST3/AU Plugin
-Introducing the **Pandamonium**
+Introducing the **Pandamonium** from Cool Panda Software
 
 [image of plugin]
 
