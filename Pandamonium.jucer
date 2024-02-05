@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="fnVc5z" name="Pandamonium" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="0" jucerFormatVersion="1"
               companyWebsite="www.coolxpanda.com" companyEmail="coolpandasoftware@gmail.com"
-              companyName="Cool Panda Software">
+              companyName="Cool Panda Software" pluginVST3Category="Distortion,Fx">
   <MAINGROUP id="dZJYby" name="Pandamonium">
     <GROUP id="{AFC6C32A-5242-35B8-F25D-610318E62FE0}" name="Source">
       <FILE id="sLBU2n" name="PluginProcessor.cpp" compile="1" resource="0"
