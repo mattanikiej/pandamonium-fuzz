@@ -55,6 +55,7 @@ void PandamoniumLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, 
     g.fillPath (p);
     
     slider.setColour(juce::Slider::textBoxOutlineColourId, _grey);
+    slider.setColour(juce::Slider::textBoxTextColourId, _gold);
 }
 
 juce::String ModeSlider::getTextFromValue(double value)
