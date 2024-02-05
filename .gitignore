@@ -1,4 +1,6 @@
 *.kra
 *.kra~
 *.filtergraph
+
+*.DS_Store
 Builds/*
