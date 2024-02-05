@@ -9,6 +9,10 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+using Track = juce::Grid::TrackInfo;
+using Fr = juce::Grid::Fr;
+using Px = juce::Grid::Px;
+
 PandamoniumLookAndFeel::PandamoniumLookAndFeel()
 {
     // sliders
@@ -53,6 +57,43 @@ void PandamoniumLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, 
     slider.setColour(juce::Slider::textBoxOutlineColourId, _grey);
 }
 
+juce::String ModeSlider::getTextFromValue(double value)
+{
+    juce::String s;
+    if (value == 0.0)
+    {
+        s = juce::String("Black - Mode");
+    }
+    else if (value == 1.0)
+    {
+        s = juce::String("White - Mode");
+    }
+    else
+    {
+        s = juce::String("Red - Mode");
+    }
+    return s;
+}
+
+double ModeSlider::getValueFromText(const juce::String &text)
+{
+    juce::String trimmed = text.trim();
+    float num;
+    if (trimmed.equalsIgnoreCase("black"))
+    {
+        num = 0.0;
+    }
+    else if (trimmed.equalsIgnoreCase("white"))
+    {
+        num = 1.0;
+    }
+    else
+    {
+        num = 2.0;
+    }
+    return num;
+}
+
 //==============================================================================
 PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
@@ -95,8 +136,6 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _modeSlider.setRange(0.0, 2.0, 1);
     _modeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     _modeSlider.setPopupDisplayEnabled(true, false, this);
-    _modeSlider.setTextValueSuffix(" - Mode");
-    _modeSlider.setValue(0.0);
 
     // add components visible
     addAndMakeVisible (&_title);
@@ -130,10 +169,6 @@ void PandamoniumAudioProcessorEditor::resized()
     float sliderWidth = 130.0f;
     
     juce::Grid grid;
-     
-    using Track = juce::Grid::TrackInfo;
-    using Fr = juce::Grid::Fr;
-    using Px = juce::Grid::Px;
 
     grid.templateRows = { Track (Fr (1)), Track (Fr (1)) };
     grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
@@ -153,8 +188,6 @@ void PandamoniumAudioProcessorEditor::resized()
 
     grid.performLayout (getLocalBounds());
     
-//    // sets the position of components
-//    _title.setBounds(0, 0, getWidth(), 30);
 }
 
 void PandamoniumAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)

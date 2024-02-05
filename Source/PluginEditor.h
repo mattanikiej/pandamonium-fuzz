@@ -28,6 +28,14 @@ private:
     juce::Colour _grey = juce::Colour(59, 58, 59);
 };
 
+
+class ModeSlider : public juce::Slider
+{
+public:
+    juce::String getTextFromValue(double value) override;
+    double getValueFromText(const juce::String &text) override;
+};
+
 //==============================================================================
 /**
 */
@@ -54,7 +62,7 @@ private:
     juce::Slider _gainSlider;
     juce::Slider _fuzzSlider;
     juce::Slider _volumeSlider;
-    juce::Slider _modeSlider;
+    ModeSlider _modeSlider;
     
     juce::Label _title;
 
