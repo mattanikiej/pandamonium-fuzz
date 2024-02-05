@@ -106,9 +106,15 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     setLookAndFeel(&_lookAndFeel);
     
     // title
-    _title.setEditable (false);
-    _title.setText("Pandamonium Fuzz", juce::NotificationType::dontSendNotification);
-    _title.setFont(15.0f);
+    _pandamoniumText.setEditable (false);
+    _pandamoniumText.setText("PANDAMONIUM", juce::NotificationType::dontSendNotification);
+    _pandamoniumText.setFont(50.0f);
+    _pandamoniumText.setJustificationType (juce::Justification::centred);
+    
+    _fuzzText.setEditable (false);
+    _fuzzText.setText("", juce::NotificationType::dontSendNotification);
+    _fuzzText.setFont(50.0f);
+    _fuzzText.setJustificationType (juce::Justification::centred);
 
     // define slider params
     _gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -138,7 +144,8 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _modeSlider.setPopupDisplayEnabled(false, false, this);
 
     // add components visible
-    addAndMakeVisible (&_title);
+    addAndMakeVisible (&_pandamoniumText);
+    addAndMakeVisible (&_fuzzText);
     
     addAndMakeVisible(&_gainSlider);
     addAndMakeVisible(&_fuzzSlider);
@@ -178,7 +185,7 @@ void PandamoniumAudioProcessorEditor::resized()
     
     juce::Grid grid;
 
-    grid.templateRows = { Track (Fr (1)), Track (Fr (1)) };
+    grid.templateRows = { Track(Fr(1)), Track (Fr (3)), Track (Fr (3)) };
     grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
     
     grid.justifyContent = juce::Grid::JustifyContent::center;
@@ -188,6 +195,8 @@ void PandamoniumAudioProcessorEditor::resized()
     grid.alignItems = juce::Grid::AlignItems::center;
 
     grid.items = {
+        juce::GridItem(_pandamoniumText),
+        juce::GridItem(_fuzzText),
         juce::GridItem (_gainSlider).withWidth(sliderWidth).withHeight(sliderWidth),
         juce::GridItem (_fuzzSlider).withWidth(sliderWidth).withHeight(sliderWidth),
         juce::GridItem (_volumeSlider).withWidth(sliderWidth).withHeight(sliderWidth),

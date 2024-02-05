@@ -64,7 +64,8 @@ private:
     juce::Slider _volumeSlider;
     ModeSlider _modeSlider;
     
-    juce::Label _title;
+    juce::Label _pandamoniumText;
+    juce::Label _fuzzText;
     
     juce::Image _background = juce::ImageCache::getFromMemory (BinaryData::background_png, BinaryData::background_pngSize);
     juce::Image _background2 = juce::ImageCache::getFromMemory (BinaryData::background2_png, BinaryData::background2_pngSize);
