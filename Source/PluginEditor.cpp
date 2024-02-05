@@ -39,15 +39,24 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     volumeSlider.setTextValueSuffix(" - Volume");
     volumeSlider.setValue(1.0);
 
+    modeSlider.setSliderStyle(juce::Slider::LinearBarVertical);
+    modeSlider.setRange(0.0, 2.0, 1);
+    modeSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
+    modeSlider.setPopupDisplayEnabled(true, false, this);
+    modeSlider.setTextValueSuffix(" - Mode");
+    modeSlider.setValue(0.0);
+
     // add sliders to editor
     addAndMakeVisible(&gainSlider);
     addAndMakeVisible(&fuzzSlider);
     addAndMakeVisible(&volumeSlider);
+    addAndMakeVisible(&modeSlider);
 
     // add listeners to sliders
     gainSlider.addListener(this);
     fuzzSlider.addListener(this);
     volumeSlider.addListener(this);
+    modeSlider.addListener(this);
 }
 
 PandamoniumAudioProcessorEditor::~PandamoniumAudioProcessorEditor()
@@ -78,6 +87,7 @@ void PandamoniumAudioProcessorEditor::resized()
     gainSlider.setBounds(40, 30, 20, getHeight() - 60);
     fuzzSlider.setBounds(80, 30, 20, getHeight() - 60);
     volumeSlider.setBounds(120, 30, 20, getHeight() - 60);
+    modeSlider.setBounds(160, 30, 20, getHeight() - 60);
 }
 
 void PandamoniumAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
@@ -85,4 +95,19 @@ void PandamoniumAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
     audioProcessor.setGain(gainSlider.getValue());
     audioProcessor.setFuzz(fuzzSlider.getValue());
     audioProcessor.setVolume(volumeSlider.getValue());
+
+    int mode = modeSlider.getValue();
+    if (mode == 0)
+    {
+        audioProcessor.setMode(ExpSoftClipping);
+    }
+    else if (mode == 1)
+    {
+        audioProcessor.setMode(SoftClipping);
+    }
+    else
+    {
+        audioProcessor.setMode(HardClipping);
+    }
+
 }

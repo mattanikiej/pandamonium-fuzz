@@ -10,6 +10,16 @@
 
 #include <JuceHeader.h>
 
+/// <summary>
+/// Enum used to set the type of clipping the plugin uses
+/// </summary>
+enum FuzzMode 
+{
+    ExpSoftClipping,
+    SoftClipping,
+    HardClipping
+};
+
 //==============================================================================
 /**
 */
@@ -63,10 +73,14 @@ public:
     float getVolume();
     void setVolume(float bias);
 
+    FuzzMode getMode();
+    void setMode(FuzzMode mode);
+
 private:
     float _gain; // gain on input signal
     float _fuzz; // amount of distortion
     float _volume; // gain on output signal
+    FuzzMode _mode; // clipping mode
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PandamoniumAudioProcessor)

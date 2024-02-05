@@ -35,6 +35,7 @@ private:
     juce::Slider gainSlider;
     juce::Slider fuzzSlider;
     juce::Slider volumeSlider;
+    juce::Slider modeSlider;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PandamoniumAudioProcessorEditor)
 };

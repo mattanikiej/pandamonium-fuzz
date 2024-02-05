@@ -163,21 +163,80 @@ void PandamoniumAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 
             float x = input * gain;
 
-
-            // soft exp clipping
-            float y;
-            if (x < 0)
+            // add distortion
+            switch (_mode)
             {
-                y = -1 + exp(x * _fuzz);
-            }
-            else
-            {
-                y = 1 - exp(-x * _fuzz);
-            }
+                case ExpSoftClipping:
+                {
+                    if (x < 0)
+                    {
+                        x = -1.0f + exp(x * _fuzz);
+                    }
+                    else
+                    {
+                        x = 1.0f - exp(-x * _fuzz);
+                    }
+                    break;
+                }
 
+                case SoftClipping:
+                {
+                    float threshold = 1.0f / 3.0f;
+                    float fuzz = 6.0f * (_fuzz / 30.0f);
 
+                    if (x > threshold)
+                    {
+                        if (x > 2.0f * threshold)
+                        {
+                            x = 1.0f;
+                        }
+                        else
+                        {
+                            x = (3.0f - (2.0f - fuzz*x) * (2.0f - fuzz*x)) / 3.0f;
+                        }
+                    }
+                    else if (x < -threshold)
+                    {
+                        if (x < -2.0f * threshold)
+                        {
+                            x = -1.0f;
+                        }
+                        else
+                        {
+                            x = -(3.0f - (2.0f - fuzz*x) * (2.0f - fuzz*x)) / 3.0f;
+                        }
+                    }
+                    else
+                    {
+                        x *= 2.0f;
+                    }
+
+                    x /= 2.0f;
+                    break;
+                }
+
+                case HardClipping: 
+                {
+                    float threshold = 1 - _fuzz / 30.0f;
+
+                    if (x > threshold) 
+                    {
+                        x = 1;
+                    }
+                    else if (x < -threshold)
+                    {
+                        x = -1;
+                    }
+                }
+                    
+                default:
+                {
+                    break;
+                }
+            }
+            
             float volume = powf(10.0f, _volume / 20.f); // decibels
-            auto output = y * volume;
+            auto output = x * volume;
 
             channelData[sample] = output;
         }
@@ -245,5 +304,15 @@ float PandamoniumAudioProcessor::getVolume()
 void PandamoniumAudioProcessor::setVolume(float volume)
 {
     _volume = volume;
+}
+
+FuzzMode PandamoniumAudioProcessor::getMode()
+{
+    return _mode;
+}
+
+void PandamoniumAudioProcessor::setMode(FuzzMode mode)
+{
+    _mode = mode;
 }
 
