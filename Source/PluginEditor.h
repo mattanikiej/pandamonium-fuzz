@@ -65,6 +65,9 @@ private:
     ModeSlider _modeSlider;
     
     juce::Label _title;
+    
+    juce::Image _background = juce::ImageCache::getFromMemory (BinaryData::background_png, BinaryData::background_pngSize);
+    juce::Image _background2 = juce::ImageCache::getFromMemory (BinaryData::background2_png, BinaryData::background2_pngSize);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PandamoniumAudioProcessorEditor)
 };

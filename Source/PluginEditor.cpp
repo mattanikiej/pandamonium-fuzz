@@ -114,28 +114,28 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _gainSlider.setRange(0.0, 24.0, 0.1);
     _gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-    _gainSlider.setPopupDisplayEnabled(true, false, this);
+    _gainSlider.setPopupDisplayEnabled(false, false, this);
     _gainSlider.setTextValueSuffix(" - Gain");
     _gainSlider.setValue(1.0);
 
     _fuzzSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _fuzzSlider.setRange(0.0, 30.0, 0.1);
     _fuzzSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-    _fuzzSlider.setPopupDisplayEnabled(true, false, this);
+    _fuzzSlider.setPopupDisplayEnabled(false, false, this);
     _fuzzSlider.setTextValueSuffix(" - Fuzz");
-    _fuzzSlider.setValue(1.0);
+    _fuzzSlider.setValue(5.0);
 
     _volumeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _volumeSlider.setRange(0.0, 24.0, 0.1);
     _volumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-    _volumeSlider.setPopupDisplayEnabled(true, false, this);
+    _volumeSlider.setPopupDisplayEnabled(false, false, this);
     _volumeSlider.setTextValueSuffix(" - Volume");
-    _volumeSlider.setValue(1.0);
+    _volumeSlider.setValue(10.0);
 
     _modeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _modeSlider.setRange(0.0, 2.0, 1);
     _modeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
-    _modeSlider.setPopupDisplayEnabled(true, false, this);
+    _modeSlider.setPopupDisplayEnabled(false, false, this);
 
     // add components visible
     addAndMakeVisible (&_title);
@@ -159,6 +159,14 @@ PandamoniumAudioProcessorEditor::~PandamoniumAudioProcessorEditor()
 //==============================================================================
 void PandamoniumAudioProcessorEditor::paint (juce::Graphics& g)
 {
+    if (_modeSlider.getValue() == 0.0)
+    {
+        g.drawImageAt (_background, 0, 0);
+    }
+    else
+    {
+        g.drawImageAt (_background2, 0, 0);
+    }
     
 }
 
