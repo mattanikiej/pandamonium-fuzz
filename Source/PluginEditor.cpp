@@ -13,8 +13,8 @@ PandamoniumLookAndFeel::PandamoniumLookAndFeel()
 {
     // sliders
     // setColour (juce::Slider::trackColourId, _ice);
-    setColour (juce::Slider::textBoxOutlineColourId, _gold);
-    setColour (juce::Slider::textBoxTextColourId, _grey);
+    setColour (juce::Slider::textBoxOutlineColourId, _grey);
+    setColour (juce::Slider::textBoxTextColourId, _whitePanda);
     
     // default window settings
     setColour(juce::ResizableWindow::backgroundColourId, _grey);
@@ -22,7 +22,7 @@ PandamoniumLookAndFeel::PandamoniumLookAndFeel()
     
 }
 
-void PandamoniumLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&)
+void PandamoniumLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider)
 {
     auto radius = (float) juce::jmin (width / 2, height / 2) - 4.0f;
     auto centreX = (float) x + (float) width  * 0.5f;
@@ -49,6 +49,8 @@ void PandamoniumLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, 
     // pointer
     g.setColour (_whitePanda);
     g.fillPath (p);
+    
+    slider.setColour(juce::Slider::textBoxOutlineColourId, _grey);
 }
 
 //==============================================================================
@@ -73,7 +75,6 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     _gainSlider.setPopupDisplayEnabled(true, false, this);
     _gainSlider.setTextValueSuffix(" - Gain");
-    _gainSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colour(59, 58, 59));
     _gainSlider.setValue(1.0);
 
     _fuzzSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -81,7 +82,6 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _fuzzSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     _fuzzSlider.setPopupDisplayEnabled(true, false, this);
     _fuzzSlider.setTextValueSuffix(" - Fuzz");
-    _fuzzSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colour(59, 58, 59));
     _fuzzSlider.setValue(1.0);
 
     _volumeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -89,7 +89,6 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _volumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     _volumeSlider.setPopupDisplayEnabled(true, false, this);
     _volumeSlider.setTextValueSuffix(" - Volume");
-    _volumeSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colour(59, 58, 59));
     _volumeSlider.setValue(1.0);
 
     _modeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -97,7 +96,6 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     _modeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
     _modeSlider.setPopupDisplayEnabled(true, false, this);
     _modeSlider.setTextValueSuffix(" - Mode");
-    _modeSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colour(59, 58, 59));
     _modeSlider.setValue(0.0);
 
     // add components visible
