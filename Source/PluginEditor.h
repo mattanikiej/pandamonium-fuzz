@@ -11,6 +11,9 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+typedef juce::AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+
+
 class PandamoniumLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
@@ -43,11 +46,10 @@ public:
 //==============================================================================
 /**
 */
-class PandamoniumAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                         private juce::Slider::Listener
+class PandamoniumAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    PandamoniumAudioProcessorEditor (PandamoniumAudioProcessor&);
+    PandamoniumAudioProcessorEditor (PandamoniumAudioProcessor& parent, juce::AudioProcessorValueTreeState& vts);
     ~PandamoniumAudioProcessorEditor() override;
 
     //==============================================================================
@@ -55,11 +57,11 @@ public:
     void resized() override;
 
 private:
-    void sliderValueChanged(juce::Slider* slider) override;
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PandamoniumAudioProcessor& audioProcessor;
+    juce::AudioProcessorValueTreeState& valueTreeState;
     
     PandamoniumLookAndFeel _lookAndFeel;
 
@@ -67,9 +69,11 @@ private:
     juce::Slider _fuzzSlider;
     juce::Slider _volumeSlider;
     ModeSlider _modeSlider;
-    
-    juce::Label _pandamoniumText;
-    juce::Label _fuzzText;
+
+    std::unique_ptr<SliderAttachment> _gainAttachment;
+    std::unique_ptr<SliderAttachment> _fuzzAttachment;
+    std::unique_ptr<SliderAttachment> _volumeAttachment;
+    std::unique_ptr<SliderAttachment> _modeAttachment;
     
     juce::Image _background = juce::ImageCache::getFromMemory (BinaryData::pluginbackground_png, BinaryData::pluginbackground_pngSize);
 

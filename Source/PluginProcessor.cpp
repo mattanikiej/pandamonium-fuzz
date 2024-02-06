@@ -20,9 +20,41 @@ PandamoniumAudioProcessor::PandamoniumAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+
+    _parameters(*this, nullptr, juce::Identifier("Pandamonium"),
+        {
+            std::make_unique<juce::AudioParameterFloat>("gain",            // parameterID
+                                                         "Gain",            // parameter name
+                                                         0.0f,              // minimum value
+                                                         24.0f,              // maximum value
+                                                         1.0f),             // default value
+
+
+            std::make_unique<juce::AudioParameterFloat>("fuzz",            // parameterID
+                                                         "Fuzz",            // parameter name
+                                                         0.0f,              // minimum value
+                                                         30.0f,              // maximum value
+                                                         15.0f),             // default value
+
+            std::make_unique<juce::AudioParameterFloat>("volume",            // parameterID
+                                                         "Volume",            // parameter name
+                                                         0.0f,              // minimum value
+                                                         24.0f,              // maximum value
+                                                         1.0f),             // default value
+
+            std::make_unique<juce::AudioParameterInt>("mode",            // parameterID
+                                                         "Mode",            // parameter name
+                                                         0,              // minimum value
+                                                         2,              // maximum value
+                                                         0),             // default value
+        })
 #endif
 {
+    _gain = _parameters.getRawParameterValue("gain");
+    _fuzz = _parameters.getRawParameterValue("fuzz");
+    _volume = _parameters.getRawParameterValue("volume");
+    _mode = _parameters.getRawParameterValue("mode");
 }
 
 PandamoniumAudioProcessor::~PandamoniumAudioProcessor()
@@ -159,83 +191,74 @@ void PandamoniumAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         {
             auto input = channelData[sample];
 
-            float gain = powf(10.0f, _gain / 20.f); // decibels
+            float gain = powf(10.0f, *_gain / 20.f); // decibels
 
             float x = input * gain;
 
             // add distortion
-            switch (_mode)
+            if (*_mode == 0)
             {
-                case ExpSoftClipping:
+                if (x < 0)
                 {
-                    if (x < 0)
-                    {
-                        x = -1.0f + exp(x * _fuzz);
-                    }
-                    else
-                    {
-                        x = 1.0f - exp(-x * _fuzz);
-                    }
-                    break;
+                    x = -1.0f + exp(x * *_fuzz);
                 }
-
-                case SoftClipping:
+                else
                 {
-                    float threshold = 1.0f / 3.0f;
-                    float fuzz = 6.0f * (_fuzz / 30.0f);
-
-                    if (x > threshold)
-                    {
-                        if (x > 2.0f * threshold)
-                        {
-                            x = 1.0f;
-                        }
-                        else
-                        {
-                            x = (3.0f - (2.0f - fuzz*x) * (2.0f - fuzz*x)) / 3.0f;
-                        }
-                    }
-                    else if (x < -threshold)
-                    {
-                        if (x < -2.0f * threshold)
-                        {
-                            x = -1.0f;
-                        }
-                        else
-                        {
-                            x = -(3.0f - (2.0f - fuzz*x) * (2.0f - fuzz*x)) / 3.0f;
-                        }
-                    }
-                    else
-                    {
-                        x *= 2.0f;
-                    }
-
-                    x /= 2.0f;
-                    break;
-                }
-
-                case HardClipping: 
-                {
-                    float threshold = 1 - _fuzz / 30.0f;
-
-                    if (x > threshold) 
-                    {
-                        x = 1;
-                    }
-                    else if (x < -threshold)
-                    {
-                        x = -1;
-                    }
-                }
-                    
-                default:
-                {
-                    break;
+                    x = 1.0f - exp(-x * *_fuzz);
                 }
             }
-            
-            float volume = powf(10.0f, _volume / 20.f); // decibels
+
+            else if (*_mode == 1)
+            {
+                float threshold = 1.0f / 3.0f;
+                float fuzz = 6.0f * (*_fuzz / 30.0f);
+
+                if (x > threshold)
+                {
+                    if (x > 2.0f * threshold)
+                    {
+                        x = 1.0f;
+                    }
+                    else
+                    {
+                        x = (3.0f - (2.0f - fuzz*x) * (2.0f - fuzz*x)) / 3.0f;
+                    }
+                }
+                else if (x < -threshold)
+                {
+                    if (x < -2.0f * threshold)
+                    {
+                        x = -1.0f;
+                    }
+                    else
+                    {
+                        x = -(3.0f - (2.0f - fuzz*x) * (2.0f - fuzz*x)) / 3.0f;
+                    }
+                }
+                else
+                {
+                    x *= 2.0f;
+                }
+
+                x /= 2.0f;
+           
+            }
+
+            else
+            {
+                float threshold = 1 - *_fuzz / 30.0f;
+
+                if (x > threshold) 
+                {
+                    x = 1;
+                }
+                else if (x < -threshold)
+                {
+                    x = -1;
+                }
+            }
+                    
+            float volume = powf(10.0f, *_volume / 20.f); // decibels
             auto output = x * volume;
 
             channelData[sample] = output;
@@ -251,7 +274,7 @@ bool PandamoniumAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* PandamoniumAudioProcessor::createEditor()
 {
-    return new PandamoniumAudioProcessorEditor (*this);
+    return new PandamoniumAudioProcessorEditor (*this, _parameters);
 }
 
 //==============================================================================
@@ -260,12 +283,20 @@ void PandamoniumAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    auto state = _parameters.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void PandamoniumAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName(_parameters.state.getType()))
+            _parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
 //==============================================================================
@@ -278,41 +309,41 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 //==============================================================================
 float PandamoniumAudioProcessor::getGain()
 {
-    return _gain;
+    return *_gain;
 }
 
 void PandamoniumAudioProcessor::setGain(float gain)
 {
-    _gain = gain;
+    *_gain = gain;
 }
 
 float PandamoniumAudioProcessor::getFuzz()
 {
-    return _fuzz;
+    return *_fuzz;
 }
 
 void PandamoniumAudioProcessor::setFuzz(float fuzz)
 {
-    _fuzz = fuzz;
+    *_fuzz = fuzz;
 }
 
 float PandamoniumAudioProcessor::getVolume()
 {
-    return _volume;
+    return *_volume;
 }
 
 void PandamoniumAudioProcessor::setVolume(float volume)
 {
-    _volume = volume;
+    *_volume = volume;
 }
 
-FuzzMode PandamoniumAudioProcessor::getMode()
+float PandamoniumAudioProcessor::getMode()
 {
-    return _mode;
+    return *_mode;
 }
 
-void PandamoniumAudioProcessor::setMode(FuzzMode mode)
+void PandamoniumAudioProcessor::setMode(float mode)
 {
-    _mode = mode;
+    *_mode = mode;
 }
 

@@ -13,6 +13,7 @@ using Track = juce::Grid::TrackInfo;
 using Fr = juce::Grid::Fr;
 using Px = juce::Grid::Px;
 
+
 PandamoniumLookAndFeel::PandamoniumLookAndFeel()
 {
     // sliders
@@ -109,8 +110,8 @@ double ModeSlider::getValueFromText(const juce::String &text)
 }
 
 //==============================================================================
-PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAudioProcessor& parent, juce::AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor (&parent), audioProcessor (parent), valueTreeState(vts)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -121,30 +122,31 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
 
     // define slider params
     _gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    _gainSlider.setRange(0.0, 24.0, 0.1);
+    //_gainSlider.setRange(0.0, 24.0, 0.1);
     _gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _gainSlider.setPopupDisplayEnabled(false, false, this);
     _gainSlider.setTextValueSuffix(" - Gain");
-    _gainSlider.setValue(1.0);
+    _gainAttachment.reset(new SliderAttachment(valueTreeState, "gain", _gainSlider));
 
     _fuzzSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    _fuzzSlider.setRange(0.0, 30.0, 0.1);
+    //_fuzzSlider.setRange(0.0, 30.0, 0.1);
     _fuzzSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _fuzzSlider.setPopupDisplayEnabled(false, false, this);
     _fuzzSlider.setTextValueSuffix(" - Fuzz");
-    _fuzzSlider.setValue(5.0);
+    _fuzzAttachment.reset(new SliderAttachment(valueTreeState, "fuzz", _fuzzSlider));
 
     _volumeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    _volumeSlider.setRange(0.0, 24.0, 0.1);
+    //_volumeSlider.setRange(0.0, 24.0, 0.1);
     _volumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _volumeSlider.setPopupDisplayEnabled(false, false, this);
     _volumeSlider.setTextValueSuffix(" - Volume");
-    _volumeSlider.setValue(10.0);
+    _volumeAttachment.reset(new SliderAttachment(valueTreeState, "volume", _volumeSlider));
 
     _modeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    _modeSlider.setRange(0.0, 2.0, 1);
+    //_modeSlider.setRange(0.0, 2.0, 1);
     _modeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _modeSlider.setPopupDisplayEnabled(false, false, this);
+    _modeAttachment.reset(new SliderAttachment(valueTreeState, "mode", _modeSlider));
 
     // make components visible
     addAndMakeVisible(&_gainSlider);
@@ -152,11 +154,6 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     addAndMakeVisible(&_volumeSlider);
     addAndMakeVisible(&_modeSlider);
 
-    // add listeners to components
-    _gainSlider.addListener(this);
-    _fuzzSlider.addListener(this);
-    _volumeSlider.addListener(this);
-    _modeSlider.addListener(this);
 }
 
 PandamoniumAudioProcessorEditor::~PandamoniumAudioProcessorEditor()
@@ -195,26 +192,4 @@ void PandamoniumAudioProcessorEditor::resized()
 
     grid.performLayout (getLocalBounds());
     
-}
-
-void PandamoniumAudioProcessorEditor::sliderValueChanged(juce::Slider* slider)
-{
-    audioProcessor.setGain(_gainSlider.getValue());
-    audioProcessor.setFuzz(_fuzzSlider.getValue());
-    audioProcessor.setVolume(_volumeSlider.getValue());
-
-    int mode = _modeSlider.getValue();
-    if (mode == 0)
-    {
-        audioProcessor.setMode(ExpSoftClipping);
-    }
-    else if (mode == 1)
-    {
-        audioProcessor.setMode(SoftClipping);
-    }
-    else
-    {
-        audioProcessor.setMode(HardClipping);
-    }
-
 }
