@@ -22,7 +22,7 @@ Experience the short demo below:
 Softest clipping for the best sustain and perfect consistent distortion.
 
 ### ⚪ White
-Soft clipping at the edges gives you high amount of control over when there will be fuzz and when the sound will be clean.
+Erratic and glitchy distortion for a wild fuzz sound.
 
 ### 🔴 Red
 Harsh and aggressive hard clipping for metal lovers and those who want some fierce distortion.
