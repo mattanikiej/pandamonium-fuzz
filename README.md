@@ -1,7 +1,9 @@
 # Pandamonium Fuzz VST3/AU Plugin
 Introducing the **Pandamonium** from Cool Panda Software
 
-[image of plugin]
+<p>
+    <img alt="Pandamonium Interface" src="/Assets/plugin-background.png" height="200">
+</p>
 
 Pandamonium offers a fierce fuzz that is sure to start a frenzy with even the most peaceful group of pandas out there! If you need a grizzly lead to cut right through any mix, or add some bite to your bass, the Pandamonium is sure to offer everything you could want.
 
