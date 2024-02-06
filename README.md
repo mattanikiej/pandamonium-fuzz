@@ -2,7 +2,7 @@
 Introducing the **Pandamonium** from Cool Panda Software
 
 <p>
-    <img alt="Pandamonium Interface" src="/Assets/plugin-background.png" height="200">
+    <img alt="Pandamonium Interface" src="/Assets/interface.png" height="200">
 </p>
 
 Pandamonium offers a fierce fuzz that is sure to start a frenzy with even the most peaceful group of pandas out there! If you need a grizzly lead to cut right through any mix, or add some bite to your bass, the Pandamonium is sure to offer everything you could want.
