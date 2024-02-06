@@ -1,6 +1,9 @@
 *.kra
 *.kra~
 *.filtergraph
+*.iss
 
 *.DS_Store
 Builds/*
+Output/*
+PandamoniumFuzz/*
