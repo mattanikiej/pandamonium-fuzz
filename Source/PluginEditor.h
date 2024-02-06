@@ -17,6 +17,7 @@ public:
     PandamoniumLookAndFeel();
     
     void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override;
+    juce::Label* PandamoniumLookAndFeel::createSliderTextBox(juce::Slider& slider) override;
     
 private:
     // colors
@@ -25,10 +26,10 @@ private:
     juce::Colour _blackOutline = juce::Colour(0, 0, 0);
     juce::Colour _blackPanda = juce::Colour(51, 51, 51);
     juce::Colour _whitePanda = juce::Colour(255, 254, 254);
-    juce::Colour _grey = juce::Colour(59, 58, 59);
+    juce::Colour _grey = juce::Colour(58, 58, 58);
     
     // typefaces
-    juce::Font _komikax = juce::Font(juce::Typeface::createSystemTypefaceFor(BinaryData::KOMIKAX_woff2, BinaryData::KOMIKAX_woff2Size));
+    juce::Font _komikax = juce::Font(juce::Typeface::createSystemTypefaceFor(BinaryData::KOMIKAX_ttf, BinaryData::KOMIKAX_ttfSize));
 };
 
 
@@ -70,8 +71,7 @@ private:
     juce::Label _pandamoniumText;
     juce::Label _fuzzText;
     
-    juce::Image _background = juce::ImageCache::getFromMemory (BinaryData::background_png, BinaryData::background_pngSize);
-    juce::Image _background2 = juce::ImageCache::getFromMemory (BinaryData::background2_png, BinaryData::background2_pngSize);
+    juce::Image _background = juce::ImageCache::getFromMemory (BinaryData::pluginbackground_png, BinaryData::pluginbackground_pngSize);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PandamoniumAudioProcessorEditor)
 };

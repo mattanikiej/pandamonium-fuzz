@@ -8,17 +8,14 @@
 
 namespace BinaryData
 {
-    extern const char*   background_png;
-    const int            background_pngSize = 20217;
+    extern const char*   KOMIKAX_ttf;
+    const int            KOMIKAX_ttfSize = 58380;
 
-    extern const char*   background2_png;
-    const int            background2_pngSize = 20270;
-
-    extern const char*   KOMIKAX_woff2;
-    const int            KOMIKAX_woff2Size = 22908;
+    extern const char*   pluginbackground_png;
+    const int            pluginbackground_pngSize = 89315;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 2;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

@@ -14,9 +14,9 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="MyGp6e" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="K5YanL" name="background.png" compile="0" resource="1" file="Assets/background.png"/>
-    <FILE id="RRre17" name="background2.png" compile="0" resource="1" file="Assets/background2.png"/>
-    <FILE id="yopFZn" name="KOMIKAX.woff2" compile="0" resource="1" file="Assets/KOMIKAX.woff2"/>
+    <FILE id="quXYkP" name="KOMIKAX.ttf" compile="0" resource="1" file="Assets/KOMIKAX.ttf"/>
+    <FILE id="V9Oixp" name="plugin-background.png" compile="0" resource="1"
+          file="Assets/plugin-background.png"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

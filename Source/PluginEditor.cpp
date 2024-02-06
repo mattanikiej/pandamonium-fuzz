@@ -16,15 +16,15 @@ using Px = juce::Grid::Px;
 PandamoniumLookAndFeel::PandamoniumLookAndFeel()
 {
     // sliders
-    // setColour (juce::Slider::trackColourId, _ice);
     setColour (juce::Slider::textBoxOutlineColourId, _grey);
     setColour (juce::Slider::textBoxTextColourId, _whitePanda);
     
     // default window settings
-    setColour(juce::ResizableWindow::backgroundColourId, _grey);
+    juce::Colour c = juce::Colour(255, 255, 255);
+    setColour(juce::ResizableWindow::backgroundColourId, c);
     
     // labels
-    setColour(juce::Label::textColourId, _whitePanda);
+    setColour(juce::Label::textColourId, _gold);
     
     setDefaultSansSerifTypeface(_komikax.getTypefacePtr());
     
@@ -57,10 +57,19 @@ void PandamoniumLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, 
     // pointer
     g.setColour (_whitePanda);
     g.fillPath (p);
-    
+
     slider.setColour(juce::Slider::textBoxOutlineColourId, _grey);
+    slider.setColour(juce::Slider::textBoxBackgroundColourId, _grey);
     slider.setColour(juce::Slider::textBoxTextColourId, _gold);
 }
+
+juce::Label* PandamoniumLookAndFeel::createSliderTextBox(juce::Slider& slider)
+{
+    juce::Label* labelPtr = LookAndFeel_V4::createSliderTextBox(slider);
+    labelPtr->setFont(25.0f);
+    return labelPtr;
+}
+
 
 juce::String ModeSlider::getTextFromValue(double value)
 {
@@ -109,49 +118,35 @@ PandamoniumAudioProcessorEditor::PandamoniumAudioProcessorEditor (PandamoniumAud
     
     // set default look and feel
     PandamoniumLookAndFeel::setDefaultLookAndFeel (&_lookAndFeel);
-    
-    // title
-    _pandamoniumText.setEditable (false);
-    _pandamoniumText.setText("PANDAMONIUM", juce::NotificationType::dontSendNotification);
-    _pandamoniumText.setJustificationType (juce::Justification::centred);
-    _pandamoniumText.setFont(50.0f);
-    
-    _fuzzText.setEditable (false);
-    _fuzzText.setText("", juce::NotificationType::dontSendNotification);
-    _fuzzText.setFont(50.0f);
-    _fuzzText.setJustificationType (juce::Justification::centred);
 
     // define slider params
     _gainSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _gainSlider.setRange(0.0, 24.0, 0.1);
-    _gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    _gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _gainSlider.setPopupDisplayEnabled(false, false, this);
     _gainSlider.setTextValueSuffix(" - Gain");
     _gainSlider.setValue(1.0);
 
     _fuzzSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _fuzzSlider.setRange(0.0, 30.0, 0.1);
-    _fuzzSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    _fuzzSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _fuzzSlider.setPopupDisplayEnabled(false, false, this);
     _fuzzSlider.setTextValueSuffix(" - Fuzz");
     _fuzzSlider.setValue(5.0);
 
     _volumeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _volumeSlider.setRange(0.0, 24.0, 0.1);
-    _volumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    _volumeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _volumeSlider.setPopupDisplayEnabled(false, false, this);
     _volumeSlider.setTextValueSuffix(" - Volume");
     _volumeSlider.setValue(10.0);
 
     _modeSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     _modeSlider.setRange(0.0, 2.0, 1);
-    _modeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 90, 20);
+    _modeSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 30);
     _modeSlider.setPopupDisplayEnabled(false, false, this);
 
-    // add components visible
-    addAndMakeVisible (&_pandamoniumText);
-    addAndMakeVisible (&_fuzzText);
-    
+    // make components visible
     addAndMakeVisible(&_gainSlider);
     addAndMakeVisible(&_fuzzSlider);
     addAndMakeVisible(&_volumeSlider);
@@ -171,15 +166,7 @@ PandamoniumAudioProcessorEditor::~PandamoniumAudioProcessorEditor()
 //==============================================================================
 void PandamoniumAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    if (_modeSlider.getValue() == 0.0)
-    {
-        g.drawImageAt (_background, 0, 0);
-    }
-    else
-    {
-        g.drawImageAt (_background2, 0, 0);
-    }
-    
+    g.drawImageAt (_background, 0, 0);
 }
 
 void PandamoniumAudioProcessorEditor::resized()
@@ -191,7 +178,7 @@ void PandamoniumAudioProcessorEditor::resized()
     
     juce::Grid grid;
 
-    grid.templateRows = { Track(Fr(1)), Track (Fr (3)), Track (Fr (3)) };
+    grid.templateRows = { Track (Fr (1)), Track (Fr (1)) };
     grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
     
     grid.justifyContent = juce::Grid::JustifyContent::center;
@@ -201,8 +188,6 @@ void PandamoniumAudioProcessorEditor::resized()
     grid.alignItems = juce::Grid::AlignItems::center;
 
     grid.items = {
-        juce::GridItem(_pandamoniumText).withHeight(fontSize),
-        juce::GridItem(_fuzzText),
         juce::GridItem (_gainSlider).withWidth(sliderWidth).withHeight(sliderWidth),
         juce::GridItem (_fuzzSlider).withWidth(sliderWidth).withHeight(sliderWidth),
         juce::GridItem (_volumeSlider).withWidth(sliderWidth).withHeight(sliderWidth),
