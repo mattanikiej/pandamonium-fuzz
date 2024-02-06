@@ -17,7 +17,7 @@ public:
     PandamoniumLookAndFeel();
     
     void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override;
-    juce::Label* PandamoniumLookAndFeel::createSliderTextBox(juce::Slider& slider) override;
+    juce::Label* createSliderTextBox(juce::Slider& slider) override;
     
 private:
     // colors

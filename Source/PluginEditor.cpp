@@ -174,7 +174,6 @@ void PandamoniumAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     float sliderWidth = 130.0f;
-    float fontSize = 50.0f;
     
     juce::Grid grid;
 
