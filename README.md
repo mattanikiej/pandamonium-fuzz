@@ -9,7 +9,7 @@ Pandamonium offers a fierce fuzz that is sure to start a frenzy with even the mo
 
 Experience the short demo below:
 
-[video of demo]
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=RBybU9gM9IIzLCVa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Parameters
 * Input Gain
